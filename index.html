@@ -1,0 +1,979 @@
+                                            { key: 'hits', label: '안타' },
+                                            { key: 'doubles', label: '2루타' },
+                                            { key: 'triples', label: '3루타' },
+                                            { key: 'homeRuns', label: '홈런' },
+                                            { key: 'totalBases', label: '총루타' },
+                                            { key: 'runs', label: '득점' },
+                                            { key: 'rbis', label: '타점' },
+                                            { key: 'walks', label: '4사구' },
+                                            { key: 'steals', label: '도루' },
+                                            { key: 'strikeouts', label: '삼진' }
+                                        ].map(({ key, label }) => 
+                                            React.createElement('div', { key: key },
+                                                React.createElement('label', { className: "block text-xs font-medium text-gray-600 mb-1" }, label),
+                                                React.createElement('input', {
+                                                    type: "number",
+                                                    min: "0",
+                                                    value: newGame[key] === 0 ? '' : newGame[key],
+                                                    placeholder: "0",
+                                                    onChange: (e) => handleInputChange(key, e.target.value),
+                                                    className: "w-full px-2 py-1.5 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-transparent"
+                                                })
+                                            )
+                                        )
+                                    )
+                                ),
+
+                                // 아웃 기록
+                                React.createElement('div', null,
+                                    React.createElement('h3', { className: "text-sm font-semibold text-gray-800 mb-3 bg-red-50 px-3 py-2 rounded-lg" }, "⚾ 아웃 기록"),
+                                    React.createElement('div', { className: "grid grid-cols-2 sm:grid-cols-3 gap-3" },
+                                        [
+                                            { key: 'doublePlay', label: '병살' },
+                                            { key: 'flyouts', label: '플라이아웃' },
+                                            { key: 'groundouts', label: '땅볼아웃' },
+                                            { key: 'catcherInterference', label: '포일' },
+                                            { key: 'errors', label: '실책' },
+                                            { key: 'caughtStealing', label: '도루저지' }
+                                        ].map(({ key, label }) => 
+                                            React.createElement('div', { key: key },
+                                                React.createElement('label', { className: "block text-xs font-medium text-gray-600 mb-1" }, label),
+                                                React.createElement('input', {
+                                                    type: "number",
+                                                    min: "0",
+                                                    value: newGame[key] === 0 ? '' : newGame[key],
+                                                    placeholder: "0",
+                                                    onChange: (e) => handleInputChange(key, e.target.value),
+                                                    className: "w-full px-2 py-1.5 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-transparent"
+                                                })
+                                            )
+                                        )
+                                    )
+                                ),
+
+                                // 타구 방향
+                                React.createElement('div', null,
+                                    React.createElement('h3', { className: "text-sm font-semibold text-gray-800 mb-3 bg-green-50 px-3 py-2 rounded-lg" }, "🎯 타구 방향"),
+                                    React.createElement('div', { className: "grid grid-cols-3 gap-3" },
+                                        [
+                                            { key: 'leftField', label: '좌익수' },
+                                            { key: 'centerField', label: '중견수' },
+                                            { key: 'rightField', label: '우익수' }
+                                        ].map(({ key, label }) => 
+                                            React.createElement('div', { key: key },
+                                                React.createElement('label', { className: "block text-xs font-medium text-gray-600 mb-1" }, label),
+                                                React.createElement('input', {
+                                                    type: "number",
+                                                    min: "0",
+                                                    value: newGame[key] === 0 ? '' : newGame[key],
+                                                    placeholder: "0",
+                                                    onChange: (e) => handleInputChange(key, e.target.value),
+                                                    className: "w-full px-2 py-1.5 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-transparent"
+                                                })
+                                            )
+                                        )
+                                    )
+                                )
+                            ),
+
+                            // 고정 푸터
+                            React.createElement('div', { className: "flex justify-between items-center p-4 border-t border-gray-200 bg-gray-50 rounded-b-xl" },
+                                React.createElement('div', { className: "flex gap-2" },
+                                    React.createElement('button', {
+                                        onClick: () => {
+                                            setIsEditing(false);
+                                            setEditingGame(null);
+                                            setDeleteChecked(false);
+                                            setNewGame({
+                                                date: "", dateDisplay: "", opponent: "", atBats: 0, plateAppearances: 0,
+                                                runs: 0, hits: 0, doubles: 0, triples: 0, homeRuns: 0, totalBases: 0,
+                                                rbis: 0, walks: 0, steals: 0, strikeouts: 0, doublePlay: 0, flyouts: 0,
+                                                groundouts: 0, errors: 0, caughtStealing: 0, foulOuts: 0, catcherInterference: 0,
+                                                leftField: 0, centerField: 0, rightField: 0, pitches: ""
+                                            });
+                                        },
+                                        className: "flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                                    },
+                                        React.createElement(X, { className: "w-4 h-4" }),
+                                        "취소"
+                                    ),
+                                    
+                                    editingGame !== null && React.createElement('div', { className: "bg-red-50 border border-red-200 rounded-lg p-3" },
+                                        React.createElement('p', { className: "text-sm text-red-700 mb-3" },
+                                            "⚠️ 이 경기를 삭제하시겠습니까?",
+                                            React.createElement('br'),
+                                            React.createElement('strong', null, `${data[editingGame]?.dateDisplay} ${data[editingGame]?.opponent}`)
+                                        ),
+                                        
+                                        !deleteChecked ? React.createElement('button', {
+                                            onClick: () => setDeleteChecked(true),
+                                            className: "flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                                        },
+                                            React.createElement(Trash2, { className: "w-4 h-4" }),
+                                            "삭제"
+                                        ) : React.createElement('div', { className: "space-y-2" },
+                                            React.createElement('p', { className: "text-sm font-bold text-red-800" }, "⚠️ 정말로 삭제하시겠습니까?"),
+                                            React.createElement('div', { className: "flex gap-2" },
+                                                React.createElement('button', {
+                                                    onClick: () => setDeleteChecked(false),
+                                                    className: "flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                                                },
+                                                    React.createElement(X, { className: "w-4 h-4" }),
+                                                    "취소"
+                                                ),
+                                                React.createElement('button', {
+                                                    onClick: () => {
+                                                        const newData = data.filter((_, i) => i !== editingGame);
+                                                        setData(newData);
+                                                        
+                                                        if (newData.length === 0) {
+                                                            localStorage.removeItem('baseballStatsData');
+                                                            localStorage.removeItem('baseballStatsData_backup1');
+                                                            localStorage.removeItem('baseballStatsData_backup2');
+                                                            localStorage.removeItem('baseballStatsData_emergency');
+                                                        } else {
+                                                            localStorage.setItem('baseballStatsData', JSON.stringify(newData));
+                                                            localStorage.setItem('baseballStatsData_backup1', JSON.stringify(newData));
+                                                            localStorage.setItem('baseballStatsData_backup2', JSON.stringify(newData));
+                                                        }
+                                                        
+                                                        setIsEditing(false);
+                                                        setEditingGame(null);
+                                                        setDeleteChecked(false);
+                                                        alert('✅ 경기가 삭제되었습니다!');
+                                                    },
+                                                    className: "flex items-center gap-2 px-4 py-2 bg-red-700 text-white rounded-lg hover:bg-red-800 transition-colors"
+                                                },
+                                                    React.createElement(Trash2, { className: "w-4 h-4" }),
+                                                    "확실히 삭제"
+                                                )
+                                            )
+                                        )
+                                    )
+                                ),
+                                
+                                React.createElement('button', {
+                                    onClick: handleSaveGame,
+                                    className: "flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                                },
+                                    React.createElement(Save, { className: "w-4 h-4" }),
+                                    "저장"
+                                )
+                            )
+                        )
+                    ),
+
+                    // 개요 뷰
+                    selectedView === 'overview' && React.createElement(React.Fragment, null,
+                        // 주요 통계 카드
+                        React.createElement('div', { className: "grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8" },
+                            [
+                                { icon: Calendar, label: "경기수", value: totalStats.games, color: "green" },
+                                { icon: Target, label: "타율", value: sabermetrics.battingAverage.toFixed(3), color: "blue" },
+                                { icon: TrendingUp, label: "안타", value: totalStats.hits, color: "orange" },
+                                { icon: Home, label: "홈런", value: totalStats.homeRuns, color: "yellow" },
+                                { icon: Award, label: "타점", value: totalStats.rbis, color: "red" },
+                                { icon: BarChart3, label: "OPS", value: sabermetrics.ops.toFixed(3), color: "purple" }
+                            ].map(({ icon: Icon, label, value, color }) =>
+                                React.createElement('div', { key: label, className: "bg-white rounded-xl p-5 shadow-sm border border-gray-100" },
+                                    React.createElement('div', { className: "flex items-center gap-3" },
+                                        React.createElement('div', { className: `w-10 h-10 bg-${color}-100 rounded-lg flex items-center justify-center` },
+                                            React.createElement(Icon, { className: `w-5 h-5 text-${color}-600` })
+                                        ),
+                                        React.createElement('div', null,
+                                            React.createElement('p', { className: "text-sm text-gray-500" }, label),
+                                            React.createElement('p', { className: "text-xl font-bold text-gray-900" }, value)
+                                        )
+                                    )
+                                )
+                            )
+                        ),
+
+                        // 세이버메트릭스 & 총합 통계
+                        React.createElement('div', { className: "bg-white rounded-2xl shadow-sm border border-gray-100 mb-8 p-6" },
+                            React.createElement('h3', { className: "text-lg font-bold text-gray-900 mb-4" }, "세이버메트릭스 & 총합 통계"),
+                            React.createElement('div', { className: "grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6" },
+                                React.createElement('div', { className: "grid grid-cols-2 md:grid-cols-4 gap-4" },
+                                    [
+                                        { label: "출루율", value: sabermetrics.onBasePercentage.toFixed(3), color: "blue" },
+                                        { label: "장타율", value: sabermetrics.sluggingPercentage.toFixed(3), color: "green" },
+                                        { label: "총 타석", value: totalStats.atBats, color: "gray" },
+                                        { label: "총 루타", value: totalStats.totalBases, color: "gray" }
+                                    ].map(({ label, value, color }) =>
+                                        React.createElement('div', { key: label, className: `text-center p-3 bg-${color}-50 rounded-lg` },
+                                            React.createElement('p', { className: "text-xs text-gray-600" }, label),
+                                            React.createElement('p', { className: `text-lg font-bold text-${color}-600` }, value)
+                                        )
+                                    )
+                                ),
+                                React.createElement('div', { className: "text-center" },
+                                    React.createElement('h4', { className: "text-md font-bold text-gray-900 mb-4" }, "타구 분포"),
+                                    React.createElement('div', { className: "grid grid-cols-3 gap-4" },
+                                        [
+                                            { label: "좌익수 방향", value: `${sabermetrics.leftFieldPct}%`, color: "orange" },
+                                            { label: "중견수 방향", value: `${sabermetrics.centerFieldPct}%`, color: "purple" },
+                                            { label: "우익수 방향", value: `${sabermetrics.rightFieldPct}%`, color: "red" }
+                                        ].map(({ label, value, color }) =>
+                                            React.createElement('div', { key: label, className: `text-center p-4 bg-${color}-50 rounded-lg` },
+                                                React.createElement('p', { className: "text-xs text-gray-600" }, label),
+                                                React.createElement('p', { className: `text-2xl font-bold text-${color}-600` }, value)
+                                            )
+                                        )
+                                    )
+                                )
+                            ),
+                            React.createElement('div', { className: "grid grid-cols-2 md:grid-cols-4 gap-4" },
+                                [
+                                    { label: "총 득점", value: totalStats.runs },
+                                    { label: "4사구", value: totalStats.walks },
+                                    { label: "플라이아웃", value: totalStats.flyouts },
+                                    { label: "땅볼아웃", value: totalStats.groundouts }
+                                ].map(({ label, value }) =>
+                                    React.createElement('div', { key: label, className: "text-center p-3 bg-gray-50 rounded-lg" },
+                                        React.createElement('p', { className: "text-xs text-gray-600" }, label),
+                                        React.createElement('p', { className: "text-lg font-bold text-gray-600" }, value)
+                                    )
+                                )
+                            )
+                        )
+                    ),
+
+                    // 트렌드 뷰
+                    selectedView === 'trends' && monthlyStats.length > 0 && React.createElement('div', { className: "space-y-8" },
+                        React.createElement('div', { className: "bg-white rounded-2xl shadow-sm border border-gray-100 p-6" },
+                            React.createElement('h3', { className: "text-lg font-bold text-gray-900 mb-4" }, "월별 성적 트렌드"),
+                            React.createElement('div', { className: "grid grid-cols-1 md:grid-cols-4 gap-4 mb-6" },
+                                monthlyStats.map((month) =>
+                                    React.createElement('div', { key: month.month, className: "bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200" },
+                                        React.createElement('h4', { className: "text-lg font-bold text-blue-900 mb-2" }, month.month),
+                                        React.createElement('div', { className: "space-y-1 text-sm" },
+                                            React.createElement('div', { className: "flex justify-between" },
+                                                React.createElement('span', { className: "text-gray-600" }, "경기"),
+                                                React.createElement('span', { className: "font-medium" }, month.games)
+                                            ),
+                                            React.createElement('div', { className: "flex justify-between" },
+                                                React.createElement('span', { className: "text-gray-600" }, "타율"),
+                                                React.createElement('span', { className: "font-bold text-blue-700" }, month.avg.toFixed(3))
+                                            ),
+                                            React.createElement('div', { className: "flex justify-between" },
+                                                React.createElement('span', { className: "text-gray-600" }, "안타"),
+                                                React.createElement('span', { className: "font-medium" }, month.hits)
+                                            ),
+                                            React.createElement('div', { className: "flex justify-between" },
+                                                React.createElement('span', { className: "text-gray-600" }, "홈런"),
+                                                React.createElement('span', { className: "font-medium" }, month.hrs)
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        ),
+                        React.createElement('div', { className: "bg-white rounded-2xl shadow-sm border border-gray-100 p-6" },
+                            React.createElement('h3', { className: "text-lg font-bold text-gray-900 mb-4" }, "상대팀별 성적"),
+                            React.createElement('div', { className: "grid grid-cols-1 md:grid-cols-3 gap-4" },
+                                opponentStats.map((team) =>
+                                    React.createElement('div', { key: team.team, className: "bg-gray-50 p-4 rounded-lg" },
+                                        React.createElement('div', { className: "flex justify-between items-center mb-2" },
+                                            React.createElement('h4', { className: "font-bold text-gray-900" }, team.team),
+                                            React.createElement('span', { className: "text-sm text-gray-500" }, `${team.games}경기`)
+                                        ),
+                                        React.createElement('div', { className: "flex justify-between items-center" },
+                                            React.createElement('span', { className: "text-sm text-gray-600" }, "타율"),
+                                            React.createElement('span', { className: `font-bold ${team.avg >= 0.300 ? 'text-green-600' : team.avg >= 0.200 ? 'text-yellow-600' : 'text-red-600'}` },
+                                                team.avg.toFixed(3)
+                                            )
+                                        ),
+                                        React.createElement('div', { className: "flex justify-between text-sm mt-1" },
+                                            React.createElement('span', { className: "text-gray-600" }, `안타: ${team.hits}`),
+                                            React.createElement('span', { className: "text-gray-600" }, `홈런: ${team.hrs}`)
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    ),
+
+                    selectedView === 'trends' && monthlyStats.length === 0 && React.createElement('div', { className: "bg-white rounded-2xl shadow-sm border border-gray-100 p-6" },
+                        React.createElement('div', { className: "text-center py-12" },
+                            React.createElement(Calendar, { className: "w-12 h-12 text-gray-400 mx-auto mb-4" }),
+                            React.createElement('h3', { className: "text-lg font-medium text-gray-900 mb-2" }, "트렌드 데이터가 없습니다"),
+                            React.createElement('p', { className: "text-gray-500" }, "경기 기록을 추가하면 트렌드 분석을 볼 수 있습니다.")
+                        )
+                    ),
+
+                    // 고급 분석 뷰
+                    selectedView === 'advanced' && React.createElement('div', { className: "space-y-8" },
+                        React.createElement('div', { className: "bg-white rounded-2xl shadow-sm border border-gray-100 p-6" },
+                            React.createElement('h3', { className: "text-lg font-bold text-gray-900 mb-4" }, "고급 분석 지표"),
+                            React.createElement('div', { className: "grid grid-cols-2 md:grid-cols-4 gap-4" },
+                                [
+                                    { icon: Zap, label: "기여도", value: advancedStats.productivityIndex.toFixed(2), desc: "경기당 득점+타점", color: "purple" },
+                                    { icon: Activity, label: "기복", value: `${advancedStats.consistency}%`, desc: "안정성 지수", color: "green" },
+                                    { icon: TrendingUp, label: "최근 상승세", value: advancedStats.momentumScore, desc: "모멘텀 점수", color: "orange" },
+                                    { icon: Clock, label: "타석당 투구수", value: advancedStats.averagePitchesPerPlateApp.toFixed(1), desc: "평균 볼카운트", color: "blue" }
+                                ].map(({ icon: Icon, label, value, desc, color }) =>
+                                    React.createElement('div', { key: label, className: `text-center p-4 bg-gradient-to-br from-${color}-50 to-${color}-100 rounded-lg` },
+                                        React.createElement(Icon, { className: `w-8 h-8 text-${color}-600 mx-auto mb-2` }),
+                                        React.createElement('p', { className: "text-sm text-gray-600" }, label),
+                                        React.createElement('p', { className: `text-xl font-bold text-${color}-700` }, value),
+                                        React.createElement('p', { className: `text-xs text-${color}-600 mt-1` }, desc)
+                                    )
+                                )
+                            )
+                        ),
+                        React.createElement('div', { className: "bg-white rounded-2xl shadow-sm border border-gray-100 p-6" },
+                            React.createElement('h3', { className: "text-lg font-bold text-gray-900 mb-4" }, "연속 기록 & 특별 통계"),
+                            React.createElement('div', { className: "grid grid-cols-1 md:grid-cols-2 gap-6" },
+                                React.createElement('div', { className: "bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-lg border border-green-200" },
+                                    React.createElement('h4', { className: "text-lg font-bold text-green-800 mb-3" }, "🔥 연속 기록"),
+                                    React.createElement('div', { className: "space-y-2" },
+                                        React.createElement('div', { className: "flex justify-between" },
+                                            React.createElement('span', { className: "text-green-700" }, "최장 연속 안타"),
+                                            React.createElement('span', { className: "font-bold text-green-800" }, `${advancedStats.hotStreak}경기`)
+                                        ),
+                                        React.createElement('div', { className: "flex justify-between" },
+                                            React.createElement('span', { className: "text-green-700" }, "연속 출루 기록"),
+                                            React.createElement('span', { className: "font-bold text-green-800" }, `${advancedStats.onBaseStreak}경기`)
+                                        )
+                                    )
+                                ),
+                                React.createElement('div', { className: "bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200" },
+                                    React.createElement('h4', { className: "text-lg font-bold text-blue-800 mb-3" }, "🏟️ 홈/원정 기록"),
+                                    React.createElement('div', { className: "space-y-2" },
+                                        React.createElement('div', { className: "flex justify-between" },
+                                            React.createElement('span', { className: "text-blue-700" }, 
+                                                "홈 경기 ",
+                                                React.createElement('span', { className: "text-xs text-blue-500" }, `(${advancedStats.homeGames}경기)`)
+                                            ),
+                                            React.createElement('span', { className: "font-bold text-blue-800" }, advancedStats.homeAverage.toFixed(3))
+                                        ),
+                                        React.createElement('div', { className: "flex justify-between" },
+                                            React.createElement('span', { className: "text-blue-700" }, 
+                                                "원정 경기 ",
+                                                React.createElement('span', { className: "text-xs text-blue-500" }, `(${advancedStats.awayGames}경기)`)
+                                            ),
+                                            React.createElement('span', { className: "font-bold text-blue-800" }, advancedStats.awayAverage.toFixed(3))
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    ),
+
+                    // 상세 기록 뷰
+                    selectedView === 'detailed' && React.createElement('div', { className: "bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden" },
+                        React.createElement('div', { className: "p-6 border-b border-gray-100" },
+                            React.createElement('h2', { className: "text-xl font-bold text-gray-900" }, "경기별 상세 기록"),
+                            React.createElement('p', { className: "text-gray-500 mt-1" }, `총 ${data.length}경기 - 모든 세부 기록 포함`)
+                        ),
+                        
+                        data.length === 0 ? React.createElement('div', { className: "text-center py-12" },
+                            React.createElement(BarChart3, { className: "w-12 h-12 text-gray-400 mx-auto mb-4" }),
+                            React.createElement('h3', { className: "text-lg font-medium text-gray-900 mb-2" }, "경기 기록이 없습니다"),
+                            React.createElement('p', { className: "text-gray-500 mb-4" }, "새로운 경기 기록을 추가해보세요."),
+                            React.createElement('button', {
+                                onClick: handleAddGame,
+                                className: "inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                            },
+                                React.createElement(Plus, { className: "w-4 h-4" }),
+                                "첫 경기 추가하기"
+                            )
+                        ) : React.createElement('div', { className: "overflow-x-auto" },
+                            React.createElement('div', { className: "text-center p-4 bg-blue-50" },
+                                React.createElement('p', { className: "text-blue-700" }, `📊 총 ${data.length}경기 기록`)
+                            ),
+                            React.createElement('div', { className: "space-y-2 p-4" },
+                                data.map((game, index) =>
+                                    React.createElement('div', { key: index, className: "flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors" },
+                                        React.createElement('div', { className: "flex items-center gap-4" },
+                                            React.createElement('button', {
+                                                onClick: () => handleEditGame(index),
+                                                className: "p-1 text-blue-600 hover:bg-blue-100 rounded transition-colors",
+                                                title: "수정"
+                                            },
+                                                React.createElement(Edit, { className: "w-4 h-4" })
+                                            ),
+                                            React.createElement('div', { className: "text-sm" },
+                                                React.createElement('div', { className: "font-medium" }, game.dateDisplay),
+                                                React.createElement('div', { className: "text-gray-600" }, game.opponent)
+                                            )
+                                        ),
+                                        React.createElement('div', { className: "flex gap-4 text-sm" },
+                                            React.createElement('span', { className: game.hits > 0 ? "text-green-600 font-bold" : "text-gray-500" }, 
+                                                `${game.hits}/${game.atBats}`
+                                            ),
+                                            game.homeRuns > 0 && React.createElement('span', { className: "text-yellow-600 font-bold" }, 
+                                                `HR:${game.homeRuns}`
+                                            ),
+                                            game.rbis > 0 && React.createElement('span', { className: "text-red-600 font-bold" }, 
+                                                `RBI:${game.rbis}`
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                <!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>박성빈 야구 통계 관리</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { Calendar, TrendingUp, Award, Target, Home, BarChart3, Zap, Activity, Clock, Plus, Edit, Trash2, Save, X } = lucide;
+
+        function BaseballStatsViewer() {
+            const [data, setData] = useState([]);
+            const [loading, setLoading] = useState(false);
+            const [selectedView, setSelectedView] = useState('overview');
+            const [isEditing, setIsEditing] = useState(false);
+            const [editingGame, setEditingGame] = useState(null);
+            const [newGame, setNewGame] = useState({
+                date: "",
+                dateDisplay: "",
+                opponent: "",
+                atBats: 0,
+                plateAppearances: 0,
+                runs: 0,
+                hits: 0,
+                doubles: 0,
+                triples: 0,
+                homeRuns: 0,
+                totalBases: 0,
+                rbis: 0,
+                walks: 0,
+                steals: 0,
+                strikeouts: 0,
+                doublePlay: 0,
+                flyouts: 0,
+                groundouts: 0,
+                errors: 0,
+                caughtStealing: 0,
+                foulOuts: 0,
+                catcherInterference: 0,
+                leftField: 0,
+                centerField: 0,
+                rightField: 0,
+                pitches: ""
+            });
+            
+            const [lastBackupTime, setLastBackupTime] = useState(null);
+            const [showPasswordModal, setShowPasswordModal] = useState(false);
+            const [editingIndex, setEditingIndex] = useState(null);
+            const [passwordInput, setPasswordInput] = useState('');
+            const [deleteChecked, setDeleteChecked] = useState(false);
+
+            useEffect(() => {
+                try {
+                    const savedData = localStorage.getItem('baseballStatsData');
+                    if (savedData) {
+                        const parsedData = JSON.parse(savedData);
+                        if (Array.isArray(parsedData) && parsedData.length > 0) {
+                            setData(parsedData);
+                            console.log(`✅ ${parsedData.length}경기 데이터를 성공적으로 복구했습니다!`);
+                            
+                            const lastBackup = localStorage.getItem('lastBackupTime');
+                            if (lastBackup) {
+                                setLastBackupTime(new Date(lastBackup));
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('데이터 복구 중 오류:', error);
+                }
+            }, []);
+
+            useEffect(() => {
+                if (data.length > 0) {
+                    try {
+                        localStorage.setItem('baseballStatsData', JSON.stringify(data));
+                        localStorage.setItem('baseballStatsData_backup1', JSON.stringify(data));
+                        localStorage.setItem('baseballStatsData_backup2', JSON.stringify(data));
+                        
+                        const now = new Date();
+                        localStorage.setItem('lastBackupTime', now.toISOString());
+                        setLastBackupTime(now);
+                        
+                        const saved = localStorage.getItem('baseballStatsData');
+                        const parsed = JSON.parse(saved);
+                        if (parsed.length !== data.length) {
+                            localStorage.setItem('baseballStatsData', JSON.stringify(data));
+                        }
+                        
+                        console.log(`💾 ${data.length}경기 데이터가 3중 백업되었습니다.`);
+                    } catch (error) {
+                        console.error('자동 저장 실패:', error);
+                        alert('⚠️ 데이터 저장에 실패했습니다!');
+                    }
+                }
+            }, [data]);
+
+            useEffect(() => {
+                const handleBeforeUnload = (e) => {
+                    if (data.length > 0) {
+                        try {
+                            localStorage.setItem('baseballStatsData_emergency', JSON.stringify(data));
+                        } catch (error) {
+                            console.error('비상 백업 실패:', error);
+                        }
+                    }
+                };
+
+                window.addEventListener('beforeunload', handleBeforeUnload);
+                return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+            }, [data]);
+            
+            const calculateStats = () => {
+                if (data.length === 0) {
+                    return {
+                        totalStats: {
+                            games: 0, atBats: 0, plateAppearances: 0, runs: 0, hits: 0,
+                            doubles: 0, triples: 0, homeRuns: 0, totalBases: 0, rbis: 0,
+                            walks: 0, steals: 0, strikeouts: 0, doublePlay: 0, flyouts: 0,
+                            groundouts: 0, errors: 0, caughtStealing: 0, foulOuts: 0,
+                            catcherInterference: 0, leftField: 0, centerField: 0, rightField: 0
+                        },
+                        sabermetrics: {
+                            battingAverage: 0, onBasePercentage: 0, sluggingPercentage: 0,
+                            ops: 0, leftFieldPct: 0, centerFieldPct: 0, rightFieldPct: 0
+                        }
+                    };
+                }
+
+                const totalStats = data.reduce((acc, game) => {
+                    Object.keys(acc).forEach(key => {
+                        if (key !== 'games' && typeof game[key] === 'number') {
+                            acc[key] += game[key];
+                        }
+                    });
+                    return acc;
+                }, {
+                    games: data.length, atBats: 0, plateAppearances: 0, runs: 0, hits: 0,
+                    doubles: 0, triples: 0, homeRuns: 0, totalBases: 0, rbis: 0,
+                    walks: 0, steals: 0, strikeouts: 0, doublePlay: 0, flyouts: 0,
+                    groundouts: 0, errors: 0, caughtStealing: 0, foulOuts: 0,
+                    catcherInterference: 0, leftField: 0, centerField: 0, rightField: 0
+                });
+
+                const battingAverage = totalStats.atBats > 0 ? totalStats.hits / totalStats.atBats : 0;
+                const onBasePercentage = totalStats.plateAppearances > 0 ? (totalStats.hits + totalStats.walks) / totalStats.plateAppearances : 0;
+                const sluggingPercentage = totalStats.atBats > 0 ? totalStats.totalBases / totalStats.atBats : 0;
+                const totalFielding = totalStats.leftField + totalStats.centerField + totalStats.rightField;
+
+                const sabermetrics = {
+                    battingAverage,
+                    onBasePercentage,
+                    sluggingPercentage,
+                    ops: onBasePercentage + sluggingPercentage,
+                    leftFieldPct: totalFielding > 0 ? Math.round((totalStats.leftField / totalFielding) * 100) : 0,
+                    centerFieldPct: totalFielding > 0 ? Math.round((totalStats.centerField / totalFielding) * 100) : 0,
+                    rightFieldPct: totalFielding > 0 ? Math.round((totalStats.rightField / totalFielding) * 100) : 0
+                };
+
+                return { totalStats, sabermetrics };
+            };
+
+            const { totalStats, sabermetrics } = calculateStats();
+
+            const calculateMonthlyStats = () => {
+                const monthlyData = {};
+                data.forEach(game => {
+                    const month = game.date.substring(5, 7);
+                    const monthName = `${parseInt(month)}월`;
+                    if (!monthlyData[monthName]) {
+                        monthlyData[monthName] = { games: 0, hits: 0, atBats: 0, homeRuns: 0, rbis: 0 };
+                    }
+                    monthlyData[monthName].games++;
+                    monthlyData[monthName].hits += game.hits;
+                    monthlyData[monthName].atBats += game.atBats;
+                    monthlyData[monthName].homeRuns += game.homeRuns;
+                    monthlyData[monthName].rbis += game.rbis;
+                });
+
+                return Object.entries(monthlyData).map(([month, stats]) => ({
+                    month,
+                    games: stats.games,
+                    avg: stats.atBats > 0 ? stats.hits / stats.atBats : 0,
+                    hits: stats.hits,
+                    hrs: stats.homeRuns,
+                    rbis: stats.rbis
+                }));
+            };
+
+            const calculateOpponentStats = () => {
+                const opponentData = {};
+                data.forEach(game => {
+                    const team = game.opponent.split('(')[0];
+                    if (!opponentData[team]) {
+                        opponentData[team] = { games: 0, hits: 0, atBats: 0, homeRuns: 0 };
+                    }
+                    opponentData[team].games++;
+                    opponentData[team].hits += game.hits;
+                    opponentData[team].atBats += game.atBats;
+                    opponentData[team].homeRuns += game.homeRuns;
+                });
+
+                return Object.entries(opponentData).map(([team, stats]) => ({
+                    team,
+                    games: stats.games,
+                    avg: stats.atBats > 0 ? stats.hits / stats.atBats : 0,
+                    hits: stats.hits,
+                    hrs: stats.homeRuns
+                })).sort((a, b) => b.games - a.games);
+            };
+
+            const monthlyStats = calculateMonthlyStats();
+            const opponentStats = calculateOpponentStats();
+
+            const calculateStreaks = () => {
+                if (data.length === 0) return { hotStreak: 0, onBaseStreak: 0 };
+                
+                let maxHitStreak = 0;
+                let currentHitStreak = 0;
+                let maxOnBaseStreak = 0;
+                let currentOnBaseStreak = 0;
+                
+                const sortedData = [...data].sort((a, b) => new Date(a.date) - new Date(b.date));
+                
+                sortedData.forEach(game => {
+                    if (game.hits > 0) {
+                        currentHitStreak++;
+                        maxHitStreak = Math.max(maxHitStreak, currentHitStreak);
+                    } else if (game.atBats > 0) {
+                        currentHitStreak = 0;
+                    }
+                    
+                    if (game.hits > 0 || game.walks > 0) {
+                        currentOnBaseStreak++;
+                        maxOnBaseStreak = Math.max(maxOnBaseStreak, currentOnBaseStreak);
+                    } else if (game.atBats > 0 || game.walks > 0) {
+                        currentOnBaseStreak = 0;
+                    }
+                });
+                
+                return { hotStreak: maxHitStreak, onBaseStreak: maxOnBaseStreak };
+            };
+
+            const calculateHomeAwayStats = () => {
+                const homeGames = data.filter(game => game.opponent.includes('(고양)'));
+                const awayGames = data.filter(game => !game.opponent.includes('(고양)'));
+                
+                const homeStats = homeGames.reduce((acc, game) => ({
+                    hits: acc.hits + game.hits,
+                    atBats: acc.atBats + game.atBats
+                }), { hits: 0, atBats: 0 });
+                
+                const awayStats = awayGames.reduce((acc, game) => ({
+                    hits: acc.hits + game.hits,
+                    atBats: acc.atBats + game.atBats
+                }), { hits: 0, atBats: 0 });
+                
+                return {
+                    homeAverage: homeStats.atBats > 0 ? homeStats.hits / homeStats.atBats : 0,
+                    awayAverage: awayStats.atBats > 0 ? awayStats.hits / awayStats.atBats : 0,
+                    homeGames: homeGames.length,
+                    awayGames: awayGames.length
+                };
+            };
+
+            const calculateMomentum = () => {
+                if (data.length === 0) return 0;
+                
+                const recentGames = data.slice(0, Math.min(5, data.length));
+                const recentStats = recentGames.reduce((acc, game) => ({
+                    hits: acc.hits + game.hits,
+                    atBats: acc.atBats + game.atBats
+                }), { hits: 0, atBats: 0 });
+                
+                const recentAvg = recentStats.atBats > 0 ? recentStats.hits / recentStats.atBats : 0;
+                const overallAvg = sabermetrics.battingAverage;
+                
+                if (overallAvg === 0) return 50;
+                
+                const momentum = Math.min(100, Math.max(0, Math.round(50 + (recentAvg - overallAvg) * 200)));
+                return momentum;
+            };
+
+            const calculateAvgPitches = () => {
+                if (data.length === 0) return 0;
+                
+                let totalPitches = 0;
+                let totalPlateAppearances = 0;
+                
+                data.forEach(game => {
+                    if (game.pitches && game.pitches.trim()) {
+                        const pitches = game.pitches.split('-').map(p => parseInt(p.replace(/[^0-9]/g, ''))).filter(p => !isNaN(p));
+                        totalPitches += pitches.reduce((sum, p) => sum + p, 0);
+                        totalPlateAppearances += pitches.length;
+                    }
+                });
+                
+                return totalPlateAppearances > 0 ? totalPitches / totalPlateAppearances : 0;
+            };
+
+            const streaks = calculateStreaks();
+            const homeAwayStats = calculateHomeAwayStats();
+            const momentum = calculateMomentum();
+            const avgPitches = calculateAvgPitches();
+
+            const advancedStats = {
+                productivityIndex: totalStats.games > 0 ? (totalStats.runs + totalStats.rbis) / totalStats.games : 0,
+                consistency: totalStats.games > 0 ? Math.min(100, Math.round((totalStats.hits / totalStats.games) * 100)) : 0,
+                momentumScore: momentum,
+                averagePitchesPerPlateApp: avgPitches,
+                powerFactor: totalStats.atBats > 0 ? totalStats.totalBases / totalStats.atBats : 0,
+                hotStreak: streaks.hotStreak,
+                onBaseStreak: streaks.onBaseStreak,
+                homeAverage: homeAwayStats.homeAverage,
+                awayAverage: homeAwayStats.awayAverage,
+                homeGames: homeAwayStats.homeGames,
+                awayGames: homeAwayStats.awayGames
+            };
+
+            const handleAddGame = () => {
+                const today = new Date();
+                const formattedDate = today.toISOString().split('T')[0];
+                const displayDate = `${today.getFullYear()}. ${String(today.getMonth() + 1).padStart(2, '0')}. ${String(today.getDate()).padStart(2, '0')}.`;
+                
+                setNewGame({
+                    date: formattedDate,
+                    dateDisplay: displayDate,
+                    opponent: "",
+                    atBats: 0, plateAppearances: 0, runs: 0, hits: 0, doubles: 0, triples: 0,
+                    homeRuns: 0, totalBases: 0, rbis: 0, walks: 0, steals: 0, strikeouts: 0,
+                    doublePlay: 0, flyouts: 0, groundouts: 0, errors: 0, caughtStealing: 0,
+                    foulOuts: 0, catcherInterference: 0, leftField: 0, centerField: 0, rightField: 0, pitches: ""
+                });
+                setEditingGame(null);
+                setDeleteChecked(false);
+                setIsEditing(true);
+            };
+
+            const handleSaveGame = () => {
+                if (editingGame !== null) {
+                    const updatedData = [...data];
+                    updatedData[editingGame] = { ...newGame };
+                    setData(updatedData.sort((a, b) => new Date(b.date) - new Date(a.date)));
+                    setEditingGame(null);
+                } else {
+                    const updatedData = [...data, { ...newGame }];
+                    setData(updatedData.sort((a, b) => new Date(b.date) - new Date(a.date)));
+                }
+                setIsEditing(false);
+                setEditingGame(null);
+                setDeleteChecked(false);
+                setNewGame({
+                    date: "", dateDisplay: "", opponent: "", atBats: 0, plateAppearances: 0,
+                    runs: 0, hits: 0, doubles: 0, triples: 0, homeRuns: 0, totalBases: 0,
+                    rbis: 0, walks: 0, steals: 0, strikeouts: 0, doublePlay: 0, flyouts: 0,
+                    groundouts: 0, errors: 0, caughtStealing: 0, foulOuts: 0, catcherInterference: 0,
+                    leftField: 0, centerField: 0, rightField: 0, pitches: ""
+                });
+            };
+
+            const handleEditGame = (index) => {
+                setEditingIndex(index);
+                setPasswordInput('');
+                setShowPasswordModal(true);
+            };
+
+            const handlePasswordSubmit = () => {
+                if (passwordInput === '0421') {
+                    setNewGame({ ...data[editingIndex] });
+                    setEditingGame(editingIndex);
+                    setDeleteChecked(false);
+                    setIsEditing(true);
+                    setShowPasswordModal(false);
+                    setPasswordInput('');
+                    setEditingIndex(null);
+                } else {
+                    alert('❌ 비밀번호가 틀렸습니다.');
+                    setPasswordInput('');
+                }
+            };
+
+            const handleInputChange = (field, value) => {
+                setNewGame(prev => ({
+                    ...prev,
+                    [field]: field === 'opponent' || field === 'pitches' || field === 'date' || field === 'dateDisplay' ? value : (value === '' ? 0 : Number(value))
+                }));
+            };
+
+            const handleDateChange = (dateValue) => {
+                const date = new Date(dateValue);
+                const displayDate = `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}. ${String(date.getDate()).padStart(2, '0')}.`;
+                setNewGame(prev => ({
+                    ...prev,
+                    date: dateValue,
+                    dateDisplay: displayDate
+                }));
+            };
+
+            if (loading) {
+                return React.createElement('div', { className: "min-h-screen bg-gray-50 flex items-center justify-center" },
+                    React.createElement('div', { className: "text-center" },
+                        React.createElement('div', { className: "w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" }),
+                        React.createElement('p', { className: "text-gray-600" }, "박성빈 선수 기록을 불러오는 중...")
+                    )
+                );
+            }
+            
+            return React.createElement('div', { className: "min-h-screen bg-gray-50 p-4" },
+                React.createElement('div', { className: "max-w-full mx-auto" },
+                    // 헤더
+                    React.createElement('div', { className: "mb-8" },
+                        React.createElement('div', { className: "bg-white rounded-2xl shadow-sm border border-gray-100 p-6" },
+                            React.createElement('div', { className: "flex items-center justify-between mb-4" },
+                                React.createElement('div', { className: "flex items-center gap-3" },
+                                    React.createElement('div', { className: "w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center" },
+                                        React.createElement(Award, { className: "w-6 h-6 text-blue-600" })
+                                    ),
+                                    React.createElement('div', null,
+                                        React.createElement('h1', { className: "text-2xl font-bold text-gray-900" }, "박성빈"),
+                                        React.createElement('div', { className: "flex items-center gap-2" },
+                                            React.createElement('p', { className: "text-gray-500" }, `2025시즌 전체 기록 (${data.length}경기)`),
+                                            lastBackupTime && React.createElement('span', { className: "inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800" },
+                                                `💾 ${lastBackupTime.toLocaleTimeString()} 백업됨`
+                                            )
+                                        )
+                                    )
+                                ),
+                                React.createElement('button', {
+                                    onClick: handleAddGame,
+                                    className: "flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                                },
+                                    React.createElement(Plus, { className: "w-4 h-4" }),
+                                    "경기 추가"
+                                )
+                            ),
+                            
+                            // 네비게이션 탭
+                            React.createElement('div', { className: "flex gap-2 mt-4" },
+                                ['overview', 'trends', 'advanced', 'detailed'].map(view => 
+                                    React.createElement('button', {
+                                        key: view,
+                                        onClick: () => setSelectedView(view),
+                                        className: `px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                                            selectedView === view 
+                                                ? 'bg-blue-100 text-blue-700' 
+                                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                        }`
+                                    },
+                                        view === 'overview' ? '개요' :
+                                        view === 'trends' ? '트렌드 분석' :
+                                        view === 'advanced' ? '고급 분석' : '상세 기록'
+                                    )
+                                )
+                            )
+                        )
+                    ),
+
+                    // 비밀번호 입력 모달
+                    showPasswordModal && React.createElement('div', { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" },
+                        React.createElement('div', { className: "bg-white rounded-xl p-6 w-full max-w-md" },
+                            React.createElement('h2', { className: "text-lg font-bold text-gray-900 mb-4" }, "🔒 수정 권한 확인"),
+                            React.createElement('p', { className: "text-sm text-gray-600 mb-4" }, "경기 기록을 수정하려면 비밀번호를 입력하세요."),
+                            React.createElement('div', { className: "mb-4" },
+                                React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "비밀번호"),
+                                React.createElement('input', {
+                                    type: "password",
+                                    value: passwordInput,
+                                    onChange: (e) => setPasswordInput(e.target.value),
+                                    onKeyPress: (e) => {
+                                        if (e.key === 'Enter') {
+                                            handlePasswordSubmit();
+                                        }
+                                    },
+                                    placeholder: "비밀번호를 입력하세요",
+                                    className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent",
+                                    autoFocus: true
+                                })
+                            ),
+                            React.createElement('div', { className: "flex gap-3" },
+                                React.createElement('button', {
+                                    onClick: () => {
+                                        setShowPasswordModal(false);
+                                        setPasswordInput('');
+                                        setEditingIndex(null);
+                                    },
+                                    className: "flex-1 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                                }, "취소"),
+                                React.createElement('button', {
+                                    onClick: handlePasswordSubmit,
+                                    className: "flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                                }, "확인")
+                            )
+                        )
+                    ),
+
+                    // 경기 추가/수정 모달
+                    isEditing && React.createElement('div', { className: "fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center z-50 p-2 overflow-y-auto" },
+                        React.createElement('div', { className: "bg-white rounded-xl my-4 w-full max-w-3xl" },
+                            React.createElement('div', { className: "flex items-center justify-between p-4 border-b border-gray-200 bg-white rounded-t-xl sticky top-0" },
+                                React.createElement('h2', { className: "text-lg font-bold text-gray-900" },
+                                    editingGame !== null ? '경기 기록 수정' : '새 경기 추가'
+                                ),
+                                React.createElement('button', {
+                                    onClick: () => {
+                                        setIsEditing(false);
+                                        setEditingGame(null);
+                                    },
+                                    className: "p-2 hover:bg-gray-100 rounded-lg transition-colors",
+                                    title: "닫기"
+                                },
+                                    React.createElement(X, { className: "w-5 h-5" })
+                                )
+                            ),
+                            
+                            React.createElement('div', { className: "p-4 space-y-4" },
+                                // 기본 정보
+                                React.createElement('div', { className: "grid grid-cols-1 sm:grid-cols-3 gap-3" },
+                                    React.createElement('div', null,
+                                        React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-1" }, "날짜"),
+                                        React.createElement('input', {
+                                            type: "date",
+                                            value: newGame.date,
+                                            onChange: (e) => handleDateChange(e.target.value),
+                                            className: "w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        })
+                                    ),
+                                    React.createElement('div', null,
+                                        React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-1" }, "상대팀"),
+                                        React.createElement('input', {
+                                            type: "text",
+                                            value: newGame.opponent,
+                                            onChange: (e) => handleInputChange('opponent', e.target.value),
+                                            placeholder: "예: SSG(강화)",
+                                            className: "w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        })
+                                    ),
+                                    React.createElement('div', null,
+                                        React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-1" }, "투구수"),
+                                        React.createElement('input', {
+                                            type: "text",
+                                            value: newGame.pitches,
+                                            onChange: (e) => handleInputChange('pitches', e.target.value),
+                                            placeholder: "예: 3-2-2-3",
+                                            className: "w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        })
+                                    )
+                                ),
+
+                                // 타격 기록
+                                React.createElement('div', null,
+                                    React.createElement('h3', { className: "text-sm font-semibold text-gray-800 mb-3 bg-blue-50 px-3 py-2 rounded-lg" }, "📊 타격 기록"),
+                                    React.createElement('div', { className: "grid grid-cols-2 sm:grid-cols-4 gap-3" },
+                                        [
+                                            { key: 'atBats', label: '타수' },
+                                            { key: 'plateAppearances', label: '타석' },
+                                
